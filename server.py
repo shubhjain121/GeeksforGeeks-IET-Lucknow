@@ -6,6 +6,16 @@ PORT = int(os.environ.get("PORT", 8000))
 
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+    if self.path == '/':
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b"Server is running!")
+    else:
+        self.send_response(404)
+        self.end_headers()
+    
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
         self.send_header('Pragma', 'no-cache')
