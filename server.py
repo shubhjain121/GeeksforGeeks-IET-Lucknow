@@ -6,15 +6,54 @@ PORT = int(os.environ.get("PORT", 8000))
 
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(b"Server is running!")
-        else:
-            self.send_response(404)
-            self.end_headers()
+def do_GET(self):
+    if self.path == '/':
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.end_headers()
+        html = """
+        <!doctype html>
+        <html>
+        <head><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+        <body>
+        <h2>Register</h2>
+        <form id="regForm">
+          <input name="fullName" placeholder="Full name" required><br><br>
+          <input name="rollNumber" placeholder="13-digit roll number" required><br><br>
+          <input name="password" placeholder="Password" required><br><br>
+          <button type="submit">Register</button>
+        </form>
+        <pre id="result"></pre>
+        <script>
+        document.getElementById('regForm').addEventListener('submit', async function(e){
+          e.preventDefault();
+          const form = e.target;
+          const data = {
+            fullName: form.fullName.value,
+            rollNumber: form.rollNumber.value,
+            password: form.password.value
+          };
+          try {
+            const res = await fetch('/register', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            document.getElementById('result').textContent = JSON.stringify(json, null, 2);
+          } catch (err) {
+            document.getElementById('result').textContent = 'Error: ' + err;
+          }
+        });
+        </script>
+        </body>
+        </html>
+        """
+        self.wfile.write(html.encode('utf-8'))
+    else:
+        self.send_response(404)
+        self.end_headers()
+
     
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
