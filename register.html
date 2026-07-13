@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | GeeksforGeeks IET Lucknow</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <meta name="theme-color" content="#308D46">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="register.css">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23308D46'/><text x='50%25' y='55%25' dominant-baseline='central' text-anchor='middle' font-size='50' font-weight='900' fill='white' font-family='Arial'>GfG</text></svg>">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">GfG</div>
+        <div>
+          <span>GeeksforGeeks</span>
+          <span class="logo-sub">IET LUCKNOW</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">← Back to Home</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="register-section">
+    <div class="container" style="display: flex; justify-content: center;">
+      <div class="register-card">
+        <div class="register-header">
+          <h2 class="section-title">Member <span class="green-text">Registration</span></h2>
+          <p class="section-subtitle" style="margin: 0 auto;">Join the official GeeksforGeeks Chapter at IET Lucknow</p>
+        </div>
+        
+        <form id="registrationForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="fullName" class="form-control" required placeholder="Enter your full name">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Roll Number</label>
+              <input type="text" id="rollNumber" class="form-control" required placeholder="e.g. 230052010XXXX">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Year of Study</label>
+              <select id="yearOfStudy" class="form-control" required>
+                <option value="" disabled selected>Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Branch</label>
+            <select id="branch" class="form-control" required>
+              <option value="" disabled selected>Select Branch</option>
+              <option value="CSE">Computer Science & Engineering</option>
+              <option value="CSE_AI">CSE (Artificial Intelligence)</option>
+              <option value="CSE_SF">CSE (Self Finance)</option>
+              <option value="ECE">Electronics & Communication</option>
+              <option value="EE">Electrical Engineering</option>
+              <option value="ME">Mechanical Engineering</option>
+              <option value="CE">Civil Engineering</option>
+              <option value="CH">Chemical Engineering</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">College Email Address</label>
+            <input type="email" id="email" class="form-control" required placeholder="example@ietlucknow.ac.in">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" id="password" class="form-control" required placeholder="Enter a strong password">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" id="confirmPassword" class="form-control" required placeholder="Re-enter password">
+            </div>
+          </div>
+          
+          <button type="submit" class="submit-btn">Complete Registration</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="padding: 20px 0; border-top: none; background: transparent;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; justify-content: center;">
+        <p>© 2026 GeeksforGeeks Student Chapter — IET Lucknow. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const fullName = document.getElementById('fullName').value;
+      const rollNumber = document.getElementById('rollNumber').value;
+      const yearOfStudy = document.getElementById('yearOfStudy').value;
+      const branch = document.getElementById('branch').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validation: Name must not contain numbers
+      if (/\d/.test(fullName)) {
+        alert("Name must not contain any numbers.");
+        return;
+      }
+
+      // Validation: Roll number must have exactly 13 digits
+      if (!/^\d{13}$/.test(rollNumber)) {
+        alert("Roll number must be exactly 13 digits.");
+        return;
+      }
+      
+      // Validation: Password length >= 5 and contains >= 1 uppercase letter
+      if (password.length < 5) {
+        alert("Password must be at least 5 characters long.");
+        return;
+      }
+      if (!/[A-Z]/.test(password)) {
+        alert("Password must contain at least one uppercase letter.");
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        alert("Passwords do not match. Please try again.");
+        return;
+      }
+      
+      const data = {
+        fullName,
+        rollNumber,
+        yearOfStudy,
+        branch,
+        email,
+        password
+      };
+
+      fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          alert('You have successfully registered. We will notify you via email.');
+          window.location.href = 'index.html';
+        } else {
+          alert('Registration failed: ' + result.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during registration. Is the server running?');
+      });
+    });
+  </script>
+</body>
+</html>
