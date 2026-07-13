@@ -72,12 +72,16 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         response = {"success": False, "message": message}
         self.wfile.write(json.dumps(response).encode('utf-8'))
-    if __name__ == '__main__':
-          os.chdir(os.path.dirname(os.path.abspath(__file__)))
-          server_address = ('', PORT)
-    # ⚡ Upgrade to ThreadingHTTPServer to handle multiple devices at once
-          httpd = http.server.ThreadingHTTPServer(server_address, CustomHandler) 
-        print(f"Serving custom HTTP server with POST support on http://0.0.0.0:{PORT}")
+
+# This block must sit completely outside of the class (0 spaces of indentation)
+if __name__ == '__main__':
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    server_address = ('', PORT)
+    
+    # ⚡ Successfully upgraded to ThreadingHTTPServer!
+    httpd = http.server.ThreadingHTTPServer(server_address, CustomHandler) 
+    print(f"Serving custom HTTP server with POST support on http://0.0.0.0:{PORT}")
+    
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
