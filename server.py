@@ -2,7 +2,8 @@ import http.server
 import json
 import os
 
-PORT = 8000
+PORT = int(os.environ.get("PORT", 8000))
+
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
